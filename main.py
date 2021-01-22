@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import pandas
 import re
 import csv
 
@@ -14,11 +15,8 @@ if products_file.mode == "r":
 # Format the parsed html file
 # strhtm = soup.prettify()
 soup = BeautifulSoup(contents, 'html.parser')
-fieldnames = ['handle', 'keywords']
 
-with open('test.csv', 'w') as f:
-    file = csv.writer(f)
-    file.writerow(fieldnames)
+all_products = {"handle":[], "keywords":[]}
 
 for link in soup.find_all(href=re.compile("it/product/")):
     product_url = link.get('href')
@@ -32,10 +30,11 @@ for link in soup.find_all(href=re.compile("it/product/")):
     else:
         product_keywords = " "
     product_handle = product_url[34:]
-    with open('test.csv', 'a') as f:
-        file = csv.writer(f)
-        file.writerow([product_handle, product_keywords])
+    all_products["handle"].append(product_handle)
+    all_products["keywords"].append(product_keywords)
 
+df = pandas.DataFrame.from_dict(all_products)
+df.to_csv("all_prodcuts.csv")
 
 
 
