@@ -23,6 +23,8 @@ from google.cloud import translate
 all_products = {"handle":[], "title":[], "keywords":[]}
 
 
+
+
 def translate_text(target, text):
     """Translates text into the target language.
 
